@@ -1,8 +1,8 @@
 import tkinter
 import sys
 
-from pythonliu.im.test_login import LoginWindow
-from pythonliu.im.test_register import RegisterWindow
+from test_login import LoginWindow
+from test_register import RegisterWindow
 
 
 class OptionWindow:

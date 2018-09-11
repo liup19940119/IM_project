@@ -2,8 +2,8 @@ import tkinter
 import sys
 from tkinter import messagebox
 
-from pythonliu.im.client import Client, ClientCallback
-from pythonliu.im.test_login import LoginWindow
+from client import Client, ClientCallback
+from test_login import LoginWindow
 
 
 class RegisterWindow(ClientCallback):

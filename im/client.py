@@ -1,5 +1,5 @@
 import socket
-from select import epoll
+from select import poll
 import select,  threading
 import json
 import sys
@@ -34,8 +34,8 @@ class Client(threading.Thread):
             self.callback.on_disconnect()
 
     def run(self):
-        ep = epoll()
-        ep.register(self.sock.fileno(), select.EPOLLIN)
+        ep = poll()
+        ep.register(self.sock.fileno(), select.POLLIN)
         while True:
             try:
                 events = ep.poll()

@@ -1,7 +1,7 @@
 from tkinter import *
 import time
 from tkinter.scrolledtext import ScrolledText
-from pythonliu.im.client import ClientCallback
+from client import ClientCallback
 
 
 class MessageWindow(ClientCallback):

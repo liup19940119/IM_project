@@ -2,8 +2,8 @@ import tkinter
 from tkinter import messagebox
 import sys, queue
 
-from pythonliu.im.client import Client, ClientCallback
-from pythonliu.im.test_message import MessageWindow
+from client import Client, ClientCallback
+from test_message import MessageWindow
 
 
 class Signal:
