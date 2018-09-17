@@ -28,7 +28,7 @@ class Client(threading.Thread):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.setDaemon(True)
         try:
-            self.sock.connect(('10.1.0.117', 3000))
+            self.sock.connect(('10.1.0.230', 4000))
             self.callback.on_connect()
         except:
             self.callback.on_disconnect()
@@ -46,20 +46,25 @@ class Client(threading.Thread):
                             raise ConnectionRefusedError
                         data = data.decode('utf-8')
                         data = json.loads(data)
-                        # print(data)
-                        if data['code'] == 'Register success':
-                            self.callback.on_register()
+                        print(data)
+                        if data['code'] == 1002 or data['code'] == 1001 or data['code'] == 1003:
+                            # register
+                            self.callback.on_register(data)
 
-                        if data['code'] == 'Login success':
-                            # print(data)
-                            self.callback.on_login(data['contact'])
+                        if data['code'] == 2002:
+                            # login success
+                            self.callback.on_login(data)
 
-                        if data['code'] == 'no':
-                            return data['code']
+                        if data['code'] == 2001:
+                            # login failure
+                            self.callback.not_login(data)
 
-                        if data['code'] == 1:
-                            # print(data)
+                        if data['code'] == 3001 or data['code'] == 3002:
+                            # send message
                             self.callback.on_message(data['message'], data['sender'])
+
+                        if data['code'] == 4001 or data['code'] == 4002:
+                            self.callback.on_add_user(data['message'], data['username'])
 
             except ConnectionRefusedError:
                 break
@@ -77,5 +82,10 @@ class Client(threading.Thread):
     def register(self, username, password, mobile, sex):
         data = {'command': 'register', 'username': username, 'password': password, 'mobile': mobile, 'sex': sex}
         self.sock.send(json.dumps(data).encode('utf-8'))
+
+    def add_user(self, username):
+        data = {'command': 'add', 'username': username}
+        self.sock.send(json.dumps(data).encode('utf-8'))
+
 
 

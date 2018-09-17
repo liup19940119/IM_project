@@ -1,15 +1,17 @@
 import tkinter
-import sys
+import sys, time
 from tkinter import messagebox
 
 from client import Client, ClientCallback
-from test_login import LoginWindow
+from test_login import LoginWindow, Signal
 
 
 class RegisterWindow(ClientCallback):
     def __init__(self):
         self.result = None
         self.root = tkinter.Tk()
+        self.signal = Signal(self.root)
+        self.signal.register_signal('register', self.get_register_result)
         self.root.title('注册')
         self.root.geometry('380x350+400+100')
 
@@ -66,12 +68,15 @@ class RegisterWindow(ClientCallback):
 
         self.client.register(username, password, mobile, sex)
 
-        if self.result == 'Register success':
+    def get_register_result(self):
+        if self.result['code'] == 1002:
+            messagebox.showinfo('注册成功', message=self.result['error_message'])
             self.root.destroy()
             global loginWin
             loginWin = LoginWindow()
         else:
-            sys.exit(1)
+
+            messagebox.showinfo('注册失败', message=self.result['error_message'])
 
     def on_connect(self):
         pass
@@ -79,8 +84,9 @@ class RegisterWindow(ClientCallback):
     def on_disconnect(self):
         messagebox.showinfo('服务器无响应', message='Can\'t connect to server')
 
-    def on_register(self):
-        messagebox.showinfo('注册成功', message='Register success')
+    def on_register(self, data):
+        self.result = data
+        self.signal.send_signal('register')
 
     def cancel(self):
         sys.exit(0)

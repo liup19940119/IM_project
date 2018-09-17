@@ -37,6 +37,7 @@ class LoginWindow(ClientCallback):
         self.root = tkinter.Tk()
         self.signal = Signal(self.root)
         self.signal.register_signal("login", self.show_message_window)
+        self.signal.register_signal("not_login", self.show_error_window)
         self.root.title('登录')
         self.root.geometry('400x200+100+100')
 
@@ -77,10 +78,17 @@ class LoginWindow(ClientCallback):
         global messageWin
         messageWin = MessageWindow(self.contacts, self.client)
 
+    def show_error_window(self):
+        messagebox.showinfo('登录失败', message=self.data['error_message'])
+
     def on_login(self, contacts):
-        setattr(self, "contacts", contacts)
+        setattr(self, "contacts", contacts['contacts'])
         self.signal.send_signal("login")
         # print('=================', self.contacts)
+
+    def not_login(self, data):
+        setattr(self, 'data', data)
+        self.signal.send_signal('not_login')
 
     def on_connect(self):
         pass
