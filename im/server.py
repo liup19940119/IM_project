@@ -75,15 +75,15 @@ class Handler:
             self.c_sock.send(json.dumps(data).encode('utf-8'))
 
     def add_user(self, data):
-        username = data['username']
-        cursor = self.conn_db.cursor()
-        if not cursor.execute("select * from user where username='{}'".format(username)):
-            data = {'code': 4001, 'message': '未找到该用户', 'username': username}
-            return self.c_sock.send(json.dumps(data).encode('utf-8'))
+        for k, v in Handler.online_user_sock.items():
+            if self.c_sock == v:
+                username = k
+                data['username'] = username
+                break
 
-        data = {'code': 4002, 'message': '添加成功', 'username': username}
+        response = requests.request('get', 'http://127.0.0.1:8000/imuser/add_user', params=data)
 
-        return self.c_sock.send(json.dumps(data).encode('utf-8'))
+        self.c_sock.send(response.content)
 
 
 class Server(threading.Thread):

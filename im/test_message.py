@@ -80,10 +80,10 @@ class MessageWindow(ClientCallback):
         self.user_text.pack(side=TOP)
 
     def add_user(self):
-        username = self.user_text.get()
-        print('=', username)
+        add_name = self.user_text.get()
+        print('=', add_name)
         self.add_win.destroy()
-        self.client.add_user(username)
+        self.client.add_user(add_name)
 
     def callback(self, event):
         self.list_contact.curselection()
@@ -98,8 +98,11 @@ class MessageWindow(ClientCallback):
             self.text_msglist.insert(END, msgcontent_from)
             self.text_msglist.insert(END, message + '\n')
 
-    def on_add_user(self, message, username):
-        messagebox.showinfo('添加结果', message=message)
-        if message == '添加成功':
-            self.list_contact.insert(END, username)
+    def on_add_user(self, data):
+        if data['code'] == 4001:
+            self.list_contact.insert(END, data['add_name'])
+            messagebox.showinfo('添加结果', message=data['message'])
+        else:
+            messagebox.showinfo('添加结果', message=data['message'])
+
 # messageWin = MessageWindow(data)

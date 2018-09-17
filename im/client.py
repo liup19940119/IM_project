@@ -63,8 +63,9 @@ class Client(threading.Thread):
                             # send message
                             self.callback.on_message(data['message'], data['sender'])
 
-                        if data['code'] == 4001 or data['code'] == 4002:
-                            self.callback.on_add_user(data['message'], data['username'])
+                        if data['code'] == 4001 or data['code'] == 4002 or data['code'] == 4003:
+                            # add user
+                            self.callback.on_add_user(data)
 
             except ConnectionRefusedError:
                 break
@@ -83,8 +84,8 @@ class Client(threading.Thread):
         data = {'command': 'register', 'username': username, 'password': password, 'mobile': mobile, 'sex': sex}
         self.sock.send(json.dumps(data).encode('utf-8'))
 
-    def add_user(self, username):
-        data = {'command': 'add', 'username': username}
+    def add_user(self, add_name):
+        data = {'command': 'add', 'add_name': add_name}
         self.sock.send(json.dumps(data).encode('utf-8'))
 
 
