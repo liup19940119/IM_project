@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    {% if value == 1002 %}
+    <script type="text/javascript">
+        (function f() {
+            alert('注册成功')
+        })()
+    </script>
+    {% endif %}
+</head>
+<body>
+<form action="/imuser/web_register/" method="post" enctype="multipart/form-data">
+    {% if value != 1002 %}
+    <table align="center">
+        {% csrf_token %}
+        {{ form }}
+        {% if value == 1001 %}
+            <tr><td style="font: 20px red bold">用户名或电话号码已经注册过了</td></tr>
+        {% endif %}
+        <tr><td>
+            <input type="submit" value="注册">
+        </td>
+        <td><a href="/imuser/web_register">重新注册</a></td></tr>
+    </table>
+    {% endif %}
+
+</form>
+</body>
+</html>

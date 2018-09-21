@@ -1,6 +1,6 @@
 import socket
 from select import poll
-import select,  threading
+import select, threading
 import json
 import sys
 
@@ -61,19 +61,22 @@ class Client(threading.Thread):
 
                         if data['code'] == 3001 or data['code'] == 3002:
                             # send message
-                            self.callback.on_message(data['message'], data['sender'])
+                            self.callback.on_message(data['message'], data['sender'], data['receiver'])
 
                         if data['code'] == 4001 or data['code'] == 4002 or data['code'] == 4003:
                             # add user
                             self.callback.on_add_user(data)
+
+                        if data['code'] == 5001:
+                            self.callback.on_show_info(data)
 
             except ConnectionRefusedError:
                 break
         ep.unregister(self.sock.fileno())
         self.sock.close()
 
-    def send_message(self, username, message):
-        data = {'command': 'message', 'receiver': username, 'message': message}
+    def send_message(self, receiver_name, message):
+        data = {'command': 'message', 'receiver': receiver_name, 'message': message}
         self.sock.send(json.dumps(data).encode('utf-8'))
 
     def login(self, username, password):
@@ -88,5 +91,6 @@ class Client(threading.Thread):
         data = {'command': 'add', 'add_name': add_name}
         self.sock.send(json.dumps(data).encode('utf-8'))
 
-
-
+    def show_info(self):
+        data = {'command': 'show_info'}
+        self.sock.send(json.dumps(data).encode('utf-8'))

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ info.username }}的个人信息</title>
+</head>
+<body>
+    <table align="center" border="1">
+        <tr><td>头像：<img src="{{ info.avatar.url }}" alt="" style="width: 60px; height: 50px" align="center"></td></tr>
+        <tr><td>名字：{{ info.username }}</td></tr>
+        <tr><td>密码：{{ info.password }}</td></tr>
+        <tr><td>电话：{{ info.mobile }}</td></tr>
+        <tr><td>性别：{{ info.sex }}</td></tr>
+        <tr><td>注册时间：{{ info.registerTime }}</td></tr>
+    </table>
+</body>
+</html>

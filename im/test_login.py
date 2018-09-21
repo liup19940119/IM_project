@@ -76,15 +76,15 @@ class LoginWindow(ClientCallback):
     def show_message_window(self):
         self.root.destroy()
         global messageWin
-        messageWin = MessageWindow(self.contacts, self.client)
+        messageWin = MessageWindow(self.contacts, self.username, self.client)
 
     def show_error_window(self):
         messagebox.showinfo('登录失败', message=self.data['error_message'])
 
-    def on_login(self, contacts):
-        setattr(self, "contacts", contacts['contacts'])
+    def on_login(self, data):
+        setattr(self, "contacts", data['contacts'])
+        setattr(self, "username", data['username'])
         self.signal.send_signal("login")
-        # print('=================', self.contacts)
 
     def not_login(self, data):
         setattr(self, 'data', data)
@@ -100,3 +100,5 @@ class LoginWindow(ClientCallback):
         sys.exit(0)
 
 # login = LoginWindow()
+
+
